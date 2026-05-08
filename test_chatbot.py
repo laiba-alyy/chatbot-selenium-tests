@@ -75,30 +75,25 @@ class ChatbotBuilderTests(unittest.TestCase):
         self.assertIsNotNone(password_field)
         driver.quit()
 
-    def test_08_successful_login(self):
-        driver = get_driver()
-        driver.get(f"{BASE_URL}/login")
-        driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
-        driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(8)
-        token = driver.execute_script("return localStorage.getItem('token');")
-        self.assertTrue(
-            "login" not in driver.current_url.lower() or token is not None,
-            f"Login failed - URL: {driver.current_url}, Token: {token}"
-        )
-        driver.quit()
+  def test_08_successful_login(self):
+    driver = get_driver()
+    driver.get(f"{BASE_URL}/login")
+    driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
+    driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
+    driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
+    time.sleep(8)
+    self.assertNotIn("login", driver.current_url.lower())
+    driver.quit()
 
-    def test_09_dashboard_loads(self):
-        driver = get_driver()
-        driver.get(f"{BASE_URL}/login")
-        driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
-        driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(8)
-        token = driver.execute_script("return localStorage.getItem('token');")
-        self.assertIsNotNone(token, "No token found - login may have failed")
-        driver.quit()
+  def test_09_dashboard_loads(self):
+    driver = get_driver()
+    driver.get(f"{BASE_URL}/login")
+    driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
+    driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
+    driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
+    time.sleep(8)
+    self.assertIn("dashboard", driver.current_url.lower())
+    driver.quit())
 
     def test_10_home_page_loads(self):
         driver = get_driver()
@@ -111,17 +106,17 @@ class ChatbotBuilderTests(unittest.TestCase):
         driver.get(BASE_URL)
         self.assertNotEqual(driver.title, "")
         driver.quit()
-
-    def test_12_login_then_visit_login_again(self):
-        driver = get_driver()
-        driver.get(f"{BASE_URL}/login")
-        driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
-        driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(8)
-        token = driver.execute_script("return localStorage.getItem('token');")
-        self.assertIsNotNone(token, "Login did not store token")
-        driver.quit()
+def test_12_login_then_visit_login_again(self):
+    driver = get_driver()
+    driver.get(f"{BASE_URL}/login")
+    driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
+    driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
+    driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
+    time.sleep(8)
+    driver.get(f"{BASE_URL}/login")
+    time.sleep(3)
+    self.assertNotIn("login", driver.current_url.lower())
+    driver.quit()
 
     def test_13_dashboard_has_content(self):
         driver = get_driver()
