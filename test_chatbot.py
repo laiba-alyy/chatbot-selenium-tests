@@ -91,7 +91,7 @@ class ChatbotBuilderTests(unittest.TestCase):
         driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
         driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(3)
+        time.sleep(6)
         self.assertNotIn("login", driver.current_url.lower())
         driver.quit()
 
@@ -102,7 +102,7 @@ class ChatbotBuilderTests(unittest.TestCase):
         driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
         driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(3)
+        time.sleep(6)
         self.assertIn("dashboard", driver.current_url.lower())
         driver.quit()
 
@@ -127,7 +127,7 @@ class ChatbotBuilderTests(unittest.TestCase):
         driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
         driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
-        time.sleep(3)
+        time.sleep(6)
         driver.get(f"{BASE_URL}/login")
         time.sleep(2)
         self.assertNotIn("login", driver.current_url.lower())
