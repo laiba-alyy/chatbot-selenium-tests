@@ -1,14 +1,17 @@
 import unittest
 import time
+import os
+import xmlrunner  # ✅ Added for Jenkins JUnit reports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-BASE_URL = "http://13.53.217.196"
-EMAIL = "laibaali3892@gmail.com"
-PASSWORD = "laibs123"
+# ✅ Use environment variable for BASE_URL (fallback to localhost)
+BASE_URL = os.getenv("BASE_URL", "http://13.53.217.196")
+EMAIL = os.getenv("TEST_EMAIL", "laibaali3892@gmail.com")
+PASSWORD = os.getenv("TEST_PASSWORD", "laibs123")
 
 def get_driver():
     options = Options()
@@ -58,7 +61,6 @@ class ChatbotBuilderTests(unittest.TestCase):
     def test_05_login_wrong_credentials(self):
         driver = get_driver()
         driver.get(f"{BASE_URL}/login")
-        wait = WebDriverWait(driver, 10)
         driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys("wrong@email.com")
         driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys("wrongpassword")
         driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
@@ -87,7 +89,6 @@ class ChatbotBuilderTests(unittest.TestCase):
     def test_08_successful_login(self):
         driver = get_driver()
         driver.get(f"{BASE_URL}/login")
-        wait = WebDriverWait(driver, 10)
         driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']").send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, "input[type='password']").send_keys(PASSWORD)
         driver.find_element(By.CSS_SELECTOR, "button[type='submit'], button").click()
@@ -164,5 +165,19 @@ class ChatbotBuilderTests(unittest.TestCase):
         self.assertIsNotNone(driver.current_url)
         driver.quit()
 
+# ✅ Generate JUnit XML report for Jenkins
 if __name__ == "__main__":
-    unittest.main()
+    # Create reports directory
+    os.makedirs("test-reports", exist_ok=True)
+    
+    # Run tests with XML output
+    unittest.main(
+        testRunner=xmlrunner.XMLTestRunner(
+            output='test-reports',
+            report_name='selenium-test-results',
+            report_title='Chatbot Builder Selenium Tests',
+            report_description='Automated UI tests for MERN chatbot builder'
+        ),
+        verbosity=2,
+        exit=False  # Prevent sys.exit() so Jenkins can capture output
+    )
