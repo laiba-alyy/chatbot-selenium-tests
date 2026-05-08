@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
-BASE_URL = "http://13.53.217.196"
+BASE_URL = "http://13.53.217.196:8000"
 EMAIL = "laibaali3892@gmail.com"
 PASSWORD = "laibs123"
 
